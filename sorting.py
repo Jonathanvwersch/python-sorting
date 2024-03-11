@@ -1,3 +1,5 @@
+import heapq
+
 class Sort:
     def bubble(self, arr):
         for i in range(len(arr)):
@@ -32,6 +34,26 @@ class Sort:
         return self.quick_sort_not_in_place(left) + mid + self.quick_sort_not_in_place(right)
     
     def quick_sort(self, arr):
+        def partition(arr, low, high):
+            i = low - 1
+            pivot = arr[high]
+
+            for j in range(low, high):
+                if arr[j] < pivot:
+                    i += 1
+                    arr[j], arr[i] = arr[i], arr[j]
+
+            arr[i+1], arr[high] = arr[high], arr[i+1]
+            return i + 1
+
+        def sort(arr, low, high):
+            if low < high:
+                pivot = partition(arr, low, high)
+                sort(arr, low, pivot - 1)
+                sort(arr, pivot + 1, high)
+                
+
+        sort(arr, 0, len(arr)-1)
         
 
     def merge_sort_not_in_place(self, arr):
@@ -69,7 +91,46 @@ class Sort:
 
         return sort(arr)
     
-    def merge(self, arr):
+    def merge_sort(self, arr):
+        def sort(arr, start, end):
+            if end - start > 1:
+                mid = (start + end) // 2
+                sort(arr, start, mid)
+                sort(arr, mid, end)
+                merge(arr, start, mid, end)
+
+        def merge(arr, start, mid, end):
+            start2 = mid
+            while start < mid and start2 < end:
+                if arr[start] > arr[start2]:
+                    value = arr[start2]
+                    index = start2
+                    while index != start:
+                        arr[index] = arr[index - 1]
+                        index -= 1
+                    arr[start] = value
+                    start += 1
+                    mid += 1
+                    start2 += 1
+                else:
+                    start += 1
+
+        sort(arr, 0, len(arr)-1)
+    
+    def heap_sort(self, arr):
+        heapq.heapify(arr)
+
+        for i in range(len(arr) - 1, -1, -1):
+            arr[i] = heapq.heappop(arr)
+
+        
+            
+
+
+
+
+
+
         
             
             
@@ -79,16 +140,4 @@ class Sort:
             
             
 
-                    
-
-
-arr = [5,3,8,3,5,9,1,6]
-sorter = Sort()
-
-# sorter.bubble(arr)
-# sorter.insertion(arr)
-# sorter.selection(arr)
-# sorter.quick_sort_not_in_place(arr)
-sorted_arr = sorter.merge_sort(arr)
-
-print(arr)
+    
